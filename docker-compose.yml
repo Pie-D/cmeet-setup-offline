@@ -1,10 +1,10 @@
 services:
     keycloak-adapter:
         container_name: keycloak-adapter
-        image: docker-jitsi-meet-keycloak-adapter:latest
+        image: registry.cmcati.vn/jitsi-meet/keycloak-adapter:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
-        - "9000:9000"
+        - "9099:9000"
         volumes:
             - ${CONFIG}/keycloak-adapter:/config:Z
         environment:
@@ -34,7 +34,7 @@ services:
     # Frontend
     web:
         container_name: web
-        image: docker-jitsi-meet-web:latest
+        image: registry.cmcati.vn/jitsi-meet/web:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${HTTP_PORT}:80'
@@ -243,7 +243,7 @@ services:
     # XMPP server
     prosody:
         container_name: prosody
-        image: docker-jitsi-meet-prosody:latest
+        image: registry.cmcati.vn/jitsi-meet/prosody:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         expose:
             - '${XMPP_PORT:-5222}'
@@ -401,7 +401,7 @@ services:
     # Focus component
     jicofo:
         container_name: jicofo
-        image: docker-jitsi-meet-jicofo:latest
+        image: registry.cmcati.vn/jitsi-meet/jicofo:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - "0.0.0.0:8888:8888"
@@ -503,7 +503,7 @@ services:
     # Video bridge
     jvb:
         container_name: jvb
-        image: docker-jitsi-meet-jvb:latest
+        image: registry.cmcati.vn/jitsi-meet/jvb:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp'
@@ -575,7 +575,7 @@ services:
             meet.jitsi:
     jibri:
         container_name: jibri
-        image: docker-jitsi-meet-jibri:latest
+        image: registry.cmcati.vn/jitsi-meet/jibri:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         volumes:
             - ${CONFIG}/jibri:/config:Z
@@ -648,7 +648,7 @@ services:
             meet.jitsi:
     jigasi:
         container_name: jigasi
-        image: docker-jitsi-meet-jigasi:latest
+        image: registry.cmcati.vn/jitsi-meet/jigasi:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         ports:
             - '${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}:${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}/udp'
@@ -722,6 +722,7 @@ services:
             - MINIO_SECRET_KEY
             - MINIO_BUCKET_AUDIO
             - MINIO_BUCKET_TXT
+            - AI_MODEL
         logging:
             driver: "json-file"
             options:
@@ -731,13 +732,13 @@ services:
         networks:
             meet.jitsi:
     whiteboard:
-        image: jitsi/excalidraw-backend:latest
+        image: registry.cmcati.vn/jitsi-meet/whiteboard:latest
         restart: ${RESTART_POLICY:-unless-stopped}
         labels:
             service: "whiteboard"
         ports:
             - "3002:80"
-            - "9091:9090"
+            - "9092:9090"
             
         depends_on:
             - web
